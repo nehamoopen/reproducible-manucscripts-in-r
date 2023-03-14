@@ -244,15 +244,11 @@ dir.create("R", recursive = TRUE)</code></pre>
 <ul>
 <li>By default, the working directory of an .Rmd file is the directory in which it is located. Therefore, if <code>manuscript.Rmd</code> is located in the <code>manuscript</code> subdirectory, the working directory will also be <code>manuscript</code>.</li>
 </ul>
-<p>However, it would be more convenient if the working directory is the project directory itself. This would make it easier to refer the relevant input and output folders. You can do this with a setup code chunk in the beginning of your document:</p>
+<p>However, it would be more convenient if the working directory is the project directory itself. This would make it easier to refer the relevant input and output folders. You can do this with a setup code chunk <strong>in the beginning of your document</strong>:</p>
 <div class="cell" data-asis="true">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This code chunk is an example of how to use an R Markdown code chunk</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># It will not be executed when the document is rendered</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"```{r}</span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"my_data &lt;- read.csv(</span><span class="sc">\"</span><span class="st">data.csv</span><span class="sc">\"</span><span class="st">)</span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"summary(my_data)</span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"```"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_knit<span class="sc">$</span><span class="fu">set</span>(<span class="at">root.dir =</span> rprojroot<span class="sc">::</span><span class="fu">find_rstudio_root_file</span>())</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#knitr::opts_knit$set(root.dir = = here::here()) -&gt; this actually is the best option, will be incorporated later</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#knitr::opts_knit$set(root.dir = 'path/to/project/folder')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Alternatively, you can use paths relative to the original working directory of the .Rmd file.</p>
 <p>An extensive explanation is provided in the R Markdown Cookbook: <a href="https://bookdown.org/yihui/rmarkdown-cookbook/working-directory.html">https://bookdown.org/yihui/rmarkdown-cookbook/working-directory.html</a>.</p>
@@ -303,17 +299,36 @@ knit: (function(input, ...) {
 </section>
 <section id="referencing" class="level2">
 <h2 class="anchored" data-anchor-id="referencing">Referencing</h2>
-<p>Use Zotero as a reference manager, use the connector plugin Better BibTex for Zotero? Basically you get the BibKeys and autoupdate of bib file Use the citr package for easy citation? https://posit.co/blog/rstudio-1-4-preview-citations/ https://rstudio.github.io/visual-markdown-editing/citations.html</p>
+<p>Use Zotero as a reference manager, use the connector plugin Better BibTex for Zotero? Basically you get the BibKeys and autoupdate of bib file Use the citr package for easy citation</p>
+<p>Links for reference, to be summarized here later:</p>
+<p><a href="https://www.anthonyschmidt.co/post/2021-10-25-a-zotero-workflow-for-r/"></a> <a href="https://dewey.dunnington.ca/post/2020/getting-started-zotero-better-bibtex-rmarkdown/"></a> <a href="https://gsverhoeven.github.io/post/zotero-rmarkdown-csl/"></a> <a href="https://christopherjunk.netlify.app/blog/2019/02/25/zotero-rmarkdown/"></a> <a href="https://bookdown.org/pdr_higgins/rmrwr/adding-citations-to-your-rmarkdown.html"></a> <a href="https://retorque.re/zotero-better-bibtex/"></a> <a href="https://posit.co/blog/rstudio-1-4-preview-citations/"></a> <a href="https://rstudio.github.io/visual-markdown-editing/citations.html"></a></p>
 </section>
 <section id="collaboration-with-word-users" class="level2">
 <h2 class="anchored" data-anchor-id="collaboration-with-word-users">Collaboration with Word users</h2>
 <ul>
-<li>send out word files, avoid email if possible and use cloud storage like one drive for version control</li>
-<li>get the word file back, extract comments and covert them to dos or issues, have thw word and rmd side-by-side to edit track changes</li>
-<li>use pandoc conversion to md and retain all track changes and comment info, these could be tagged as to-dos if diff-ed</li>
-<li>send out a qmd file and let them open it in word and edit without track changes? comments can be extracted…try and open the edited qmd file in r and diff it</li>
-<li>archive all word feedback version for future reference</li>
+<li><p>send out word files, avoid email and use cloud storage like one drive for version control - so you have a folder with all docs instead of having to scroll through email. use a smart file naming convention!</p></li>
+<li><p>when a round of reviewing is completed, save a copy of the word file and archive it for future reference (to comments and tracked changes)</p></li>
 </ul>
+<p>STILL FIGURING OUT WHAT IS BEST:</p>
+<ul>
+<li><p>for editing, you may need to have the word doc and rmd side-by-side. work in the rmd only and have the word file with comments and tracked changes for reference.</p></li>
+<li><p>you can use the <a href="https://gitlab.com/hrbrmstr/docxtractr">docxtractr</a> package to extract all comments from the word doc (see <code>docx_extract_all_cmnts()</code> function. You can covert them TODOs in R (the <a href="https://github.com/dokato/todor">TODOr</a> package would be great here) or GitHub issues.</p></li>
+<li><p>use pandoc conversion to md and retain all track changes and comment info</p></li>
+</ul>
+<pre><code>pandoc -f docx -t markdown "word_filename.docx" -o "markdown_filename.md" --track-changes=all</code></pre>
+<p>Then you could use git diff,</p>
+<p>Either as a command:</p>
+<pre><code>git diff --no-index manuscript.Rmd markdown_filename.md</code></pre>
+<p>Or within RStudio: search for git diff in the following link: <a href="">https://rviews.rstudio.com/2020/04/23/10-commands-to-get-started-with-git/</a></p>
+<p><strong>BEST OPTION?</strong> send out an Rmd file (instead of docx) called something like: manuscript_for_review.Rmd and let them open it in word and edit it normally? they return the Rmd file (make sure they don’t save as docs but retain the Rmd extension) you can then try and extract the comments + open the edited Rmd file in r and diff it with the original Rmd. This is better because the Rmd formatting like YAML and Markdown will still be retained, whereas in Word it would be rendered as fancy output.</p>
+<pre><code># this is for comparing two different files and the --no-index potentially one file is not in the git folder but somewhere else
+
+git diff --no-index manuscript.Rmd manuscript_for_review.Rmd</code></pre>
+<p>If you just wanted to git diff the same file, assuming there are some changes</p>
+<pre><code>git diff manuscript.Rmd</code></pre>
+</section>
+<section id="end-for-now" class="level1">
+<h1>—————- END (for now) ———</h1>
 </section>
 
 </main>

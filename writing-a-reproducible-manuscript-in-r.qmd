@@ -144,24 +144,13 @@ For both packages, you can follow the (relatively straightforward) instructions 
 
 - By default, the working directory of an .Rmd file is the directory in which it is located. Therefore, if `manuscript.Rmd` is located in the `manuscript` subdirectory, the working directory will also be `manuscript`. 
 
-However, it would be more convenient if the working directory is the project directory itself. This would make it easier to refer the relevant input and output folders. You can do this with a setup code chunk in the beginning of your document:
+However, it would be more convenient if the working directory is the project directory itself. This would make it easier to refer the relevant input and output folders. You can do this with a setup code chunk **in the beginning of your document**:
 
-```{r example, eval=FALSE, asis=TRUE}
-# This code chunk is an example of how to use an R Markdown code chunk
-# It will not be executed when the document is rendered
-
-cat("```{r}\n",
-    "my_data <- read.csv(\"data.csv\")\n",
-    "summary(my_data)\n",
-    "```")
-```
-
-```{r, setup, include=FALSE}
-#knitr::opts_knit$set(root.dir = 'path/to/project/folder') 
+```{r, example, eval=FALSE, asis=TRUE}
 knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
-#knitr::opts_knit$set(root.dir = = here::here())
+#knitr::opts_knit$set(root.dir = = here::here()) -> this actually is the best option, will be incorporated later
+#knitr::opts_knit$set(root.dir = 'path/to/project/folder')
 ```
-
 
 Alternatively, you can use paths relative to the original working directory of the .Rmd file.
 
@@ -234,14 +223,61 @@ You could then render to Word on an as-needed basis by using: `rmarkdown::render
 
 Use Zotero as a reference manager, use the connector plugin
 Better BibTex for Zotero? Basically you get the BibKeys and autoupdate of bib file
-Use the citr package for easy citation?
-https://posit.co/blog/rstudio-1-4-preview-citations/
-https://rstudio.github.io/visual-markdown-editing/citations.html
+Use the citr package for easy citation
+
+Links for reference, to be summarized here later:
+
+[](https://www.anthonyschmidt.co/post/2021-10-25-a-zotero-workflow-for-r/)
+[](https://dewey.dunnington.ca/post/2020/getting-started-zotero-better-bibtex-rmarkdown/)
+[](https://gsverhoeven.github.io/post/zotero-rmarkdown-csl/)
+[](https://christopherjunk.netlify.app/blog/2019/02/25/zotero-rmarkdown/)
+[](https://bookdown.org/pdr_higgins/rmrwr/adding-citations-to-your-rmarkdown.html)
+[](https://retorque.re/zotero-better-bibtex/)
+[](https://posit.co/blog/rstudio-1-4-preview-citations/)
+[](https://rstudio.github.io/visual-markdown-editing/citations.html)
+
 
 ## Collaboration with Word users
 
-- send out word files, avoid email if possible and use cloud storage like one drive for version control
-- get the word file back, extract comments and covert them to dos or issues, have thw word and rmd side-by-side to edit track changes
-- use pandoc conversion to md and retain all track changes and comment info, these could be tagged as to-dos if diff-ed
-- send out a qmd file and let them open it in word and edit without track changes? comments can be extracted...try and open the edited qmd file in r and diff it
-- archive all word feedback version for future reference
+- send out word files, avoid email and use cloud storage like one drive for version control - so you have a folder with all docs instead of having to scroll through email. use a smart file naming convention!
+
+- when a round of reviewing is completed, save a copy of the word file and archive it for future reference (to comments and tracked changes)
+
+STILL FIGURING OUT WHAT IS BEST:
+
+- for editing, you may need to have the word doc and rmd side-by-side. work in the rmd only and have the word file with comments and tracked changes for reference.
+
+- you can use the [docxtractr](https://gitlab.com/hrbrmstr/docxtractr) package to extract all comments from the word doc (see `docx_extract_all_cmnts()` function. You can covert them TODOs in R (the [TODOr](https://github.com/dokato/todor) package would be great here) or GitHub issues.
+
+- use pandoc conversion to md and retain all track changes and comment info
+
+```
+pandoc -f docx -t markdown "word_filename.docx" -o "markdown_filename.md" --track-changes=all
+```
+
+Then you could use git diff,
+
+Either as a command:
+
+```
+git diff --no-index manuscript.Rmd markdown_filename.md
+```
+
+Or within RStudio: search for git diff in the following link: [https://rviews.rstudio.com/2020/04/23/10-commands-to-get-started-with-git/]()
+
+**BEST OPTION?** send out an Rmd file (instead of docx) called something like: manuscript_for_review.Rmd and let them open it in word and edit it normally? they return the Rmd file (make sure they don't save as docs but retain the Rmd extension) you can then try and extract the comments + open the edited Rmd file in r and diff it with the original Rmd. This is better because the Rmd formatting like YAML and Markdown will still be retained, whereas in Word it would be rendered as fancy output.
+
+```
+# this is for comparing two different files and the --no-index potentially one file is not in the git folder but somewhere else
+
+git diff --no-index manuscript.Rmd manuscript_for_review.Rmd
+```
+
+If you just wanted to git diff the same file, assuming there are some changes
+
+```
+git diff manuscript.Rmd
+```
+
+# ---------------- END (for now) ---------
+
