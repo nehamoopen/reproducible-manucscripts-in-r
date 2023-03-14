@@ -227,15 +227,14 @@ Use the citr package for easy citation
 
 Links for reference, to be summarized here later:
 
-[](https://www.anthonyschmidt.co/post/2021-10-25-a-zotero-workflow-for-r/)
-[](https://dewey.dunnington.ca/post/2020/getting-started-zotero-better-bibtex-rmarkdown/)
-[](https://gsverhoeven.github.io/post/zotero-rmarkdown-csl/)
-[](https://christopherjunk.netlify.app/blog/2019/02/25/zotero-rmarkdown/)
-[](https://bookdown.org/pdr_higgins/rmrwr/adding-citations-to-your-rmarkdown.html)
-[](https://retorque.re/zotero-better-bibtex/)
-[](https://posit.co/blog/rstudio-1-4-preview-citations/)
-[](https://rstudio.github.io/visual-markdown-editing/citations.html)
-
+[https://www.anthonyschmidt.co/post/2021-10-25-a-zotero-workflow-for-r/](https://www.anthonyschmidt.co/post/2021-10-25-a-zotero-workflow-for-r/)
+[https://dewey.dunnington.ca/post/2020/getting-started-zotero-better-bibtex-rmarkdown/](https://dewey.dunnington.ca/post/2020/getting-started-zotero-better-bibtex-rmarkdown/)
+[https://gsverhoeven.github.io/post/zotero-rmarkdown-csl/](https://gsverhoeven.github.io/post/zotero-rmarkdown-csl/)
+[https://christopherjunk.netlify.app/blog/2019/02/25/zotero-rmarkdown/](https://christopherjunk.netlify.app/blog/2019/02/25/zotero-rmarkdown/)
+[https://bookdown.org/pdr_higgins/rmrwr/adding-citations-to-your-rmarkdown.html](https://bookdown.org/pdr_higgins/rmrwr/adding-citations-to-your-rmarkdown.html)
+[https://retorque.re/zotero-better-bibtex/](https://retorque.re/zotero-better-bibtex/)
+[https://posit.co/blog/rstudio-1-4-preview-citations/](https://posit.co/blog/rstudio-1-4-preview-citations/)
+[https://rstudio.github.io/visual-markdown-editing/citations.html](https://rstudio.github.io/visual-markdown-editing/citations.html)
 
 ## Collaboration with Word users
 
