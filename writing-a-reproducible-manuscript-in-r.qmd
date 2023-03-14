@@ -1,0 +1,247 @@
+---
+title: "Writing A Reproducible Manuscript in R"
+author: "Neha Moopen"
+format: html
+output-file: index
+---
+
+## Phase 1: Getting Started
+
+**1. Create a new remote repository on GitHub.**
+
+- Give your repository a short, but descriptive/memorable name. 
+
+**Note:** Do not use spaces in the name!
+
+- You can choose between a `Public` or `Private` repository. It is also possible to change the repository's visibility at a later point.
+
+- Select `Initialize this repository with a README.`
+
+- Click `Add .gitignore` and select the .gitignore template for R.
+
+**Note:** We will be editing this .gitignore file at a later point!
+
+- Click `Add a license` and select your preferred license. We recommend CC-BY license and/or the MIT License.
+
+- After creating the repository, copy the SSH URL to the repository. It should look something like `https://github.com/username/repository.git`
+
+**2. Create a project in RStudio**
+
+- In RStudio, click File -> New Project -> Version Control -> Git 
+
+- Paste the SSH URL to the repository in the relevant field. 
+
+- For consistency, give your project directory/folder the same name as your GitHub repository.
+
+- Make sure your project directory/folder is created (as a subdirectory) in an accessible place on your system.
+
+- Select `Open project in a new session`.
+
+**3. Create a project structure suited for reproducible work**
+
+- You can generate a directory structure (derived from best practices) by running the following piece of code in you R console:
+
+```
+# Create subdirectories for data
+
+dir.create("data/processed", recursive = TRUE)
+dir.create("data/raw", recursive = TRUE)
+dir.create("data/temp", recursive = TRUE)
+
+# Create subdirectories for documentation
+
+dir.create("docs/manuscript", recursive = TRUE)
+dir.create("docs/reports", recursive = TRUE)
+
+# Create subdirectories for results
+
+dir.create("results/figures", recursive = TRUE)
+dir.create("results/output", recursive = TRUE)
+
+# Create subdirectory for R code
+
+dir.create("R", recursive = TRUE)
+```
+
+The following directory structure is what we would like to see:
+
+```
+.
+├── .gitignore
+├── project-name.Rproj  <- RStudio project file
+├── CITATION.cff        <- To be created later, via GitHub.
+├── LICENSE.md
+├── README.md
+├── data                <- All project data, ignored by git
+│   ├── processed       <- The final, canonical data sets for modeling. (PG)
+│   ├── raw             <- The original, immutable data dump. (RO)
+│   └── temp            <- Intermediate data that has been transformed. (PG)
+├── docs                <- Documentation notebook for users (HW)
+│   ├── preregistration <- Preregistration source, e.g., LaTeX, Markdown, etc. (HW)
+│   ├── manuscript      <- Manuscript source, e.g., LaTeX, Markdown, etc. (HW)
+│   └── reports         <- Other project reports and notebooks (e.g. Jupyter, .Rmd) (HW)
+├── results
+│   ├── figures         <- Figures for the manuscript or reports (PG)
+│   └── output          <- Other output for the manuscript or reports (PG)
+└── R                   <- Source code for this project (HW)
+```
+
+The project structure distinguishes three kinds of folders:
+
+- **Read-Only (RO)**: not edited by either code or researcher
+- **Human-Writeable (HW)**: edited by the researcher only.
+- **Project-Generated (PG)**: folders generated when running the code; these folders can be deleted or emptied and will be completely reconstituted as the project is run.
+
+This project structure follows best practices as defined in [https://github.com/bvreede/good-enough-project](https://github.com/bvreede/good-enough-project).
+
+The `R` folder is intended to contain the source code for the project or functions organized into individual files/scripts. See: [https://r-pkgs.org/code.html](https://r-pkgs.org/code.html) for more information. This folder could very well be renamed `scripts` if preferred. https://bookdown.org/yihui/rmarkdown-cookbook/source-script.html
+
+Ideally, the manuscript will source functions from this folder. See: [https://www.earthdatascience.org/courses/earth-analytics/multispectral-remote-sensing-data/source-function-in-R/](https://www.earthdatascience.org/courses/earth-analytics/multispectral-remote-sensing-data/source-function-in-R/) for an explanation. 
+
+You are free to adapt the structure to suit your requirements. For example, split or reorganize the `docs` folder to distinguish between scientific writing (like preregistrations and manuscripts) and study documentation/materials (like codebooks, protocols, materials, metadata). With respect to study materials, make sure to only upload materials to which you own the rights, or when the materials’ license allows it 
+
+What is most important is that `data` (RO), `docs` and/or `R` (HW), `results` (PG) are in separate folders - based on the type of content contained within.
+
+**4. Edit your .gitignore file**
+
+- Open your `.gitignore` file in RStudio and edit (don't forget to save) to to exclude the data directory and subdirectories + retain the .Rproj file. 
+
+At the very least, The `.gitignore` file should include the following: 
+
+```
+# Data 
+/data/temp
+/data/processed
+/data/raw
+
+# History files
+.Rhistory
+.Rapp.history
+
+# Session Data files
+.RData
+
+# User-specific files
+.Ruserdata
+
+# R Environment Variables
+.Renviron
+```
+
+So make sure the .Rproj file is removed from the `.gitignore` file. The remaining files (like those related to pacakge and CMD builds etc.) can removed if preferred.
+
+## Phase 2: Writing & Analysis
+
+**1. Use the `prereg` and `rticles` packages for preregistration and manuscript templates.**
+
+- The `prereg package`: [https://github.com/crsh/prereg](https://github.com/crsh/prereg)
+
+- The `rticles`: [https://pkgs.rstudio.com/rticles/](https://pkgs.rstudio.com/rticles/)
+
+For both packages, you can follow the (relatively straightforward) instructions to obtain your preferred templates. Make sure to save the .Rmd templates in the appropriate (sub)directory.
+
+**2. Update the .Rmd templates to align with your project directories and subdirectories**
+
+- By default, the working directory of an .Rmd file is the directory in which it is located. Therefore, if `manuscript.Rmd` is located in the `manuscript` subdirectory, the working directory will also be `manuscript`. 
+
+However, it would be more convenient if the working directory is the project directory itself. This would make it easier to refer the relevant input and output folders. You can do this with a setup code chunk in the beginning of your document:
+
+```{r example, eval=FALSE, asis=TRUE}
+# This code chunk is an example of how to use an R Markdown code chunk
+# It will not be executed when the document is rendered
+
+cat("```{r}\n",
+    "my_data <- read.csv(\"data.csv\")\n",
+    "summary(my_data)\n",
+    "```")
+```
+
+```{r, setup, include=FALSE}
+#knitr::opts_knit$set(root.dir = 'path/to/project/folder') 
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+#knitr::opts_knit$set(root.dir = = here::here())
+```
+
+
+Alternatively, you can use paths relative to the original working directory of the .Rmd file.
+
+An extensive explanation is provided in the R Markdown Cookbook: [https://bookdown.org/yihui/rmarkdown-cookbook/working-directory.html](https://bookdown.org/yihui/rmarkdown-cookbook/working-directory.html). 
+
+In order to specify the output directory when knitting the Rmd file, you can add the follow to the end of your YAML section in the Rmd file
+
+```
+knit: (function(input, ...) {
+    rmarkdown::render(
+      input,
+      output_dir = "../../results/output"
+    )
+  })
+```
+
+To take it a step further, sometimes you want to knit multiple output formats simultaneously. You can adapt your YAML in the following way:
+
+```
+output: 
+  rticles::arxiv_article: default 
+  word_document: default
+knit: (function(input, ...) {
+    rmarkdown::render(
+      input,
+      output_format = "all",
+      output_dir = "../../results/output"
+    )
+  })
+```
+
+If you were using the default R Markdown pdf template, then it would look like this:
+
+```
+output: 
+  pdf_document: default 
+  word_document: default
+knit: (function(input, ...) {
+    rmarkdown::render(
+      input,
+      output_format = "all",
+      output_dir = "../../results/output"
+    )
+  })
+```
+
+If you were only using the rticles pdf template then it would look like this:
+
+```
+output: rticles:: arxiv_article
+knit: (function(input, ...) {
+    rmarkdown::render(
+      input,
+      output_dir = "../../results/output"
+    )
+  })
+```
+
+You could then render to Word on an as-needed basis by using: `rmarkdown::render("path/to/your/manuscript.Rmd", output_format = "word_document")`
+
+**3. Preregistration**
+
+- Render the preregistration to PDF, and upload it as an attachment to a dedicated preregistration server like AsPredicted.org or Open Science Framework.
+
+- You can also integrate your GitHub repository with OSF.
+
+- If and when you commit and push the final preregistration to you GitHub repository, you can tag that commit as a release, using the label “preregistration”. A tagged release helps others retrieve this commit. 
+
+## Referencing
+
+Use Zotero as a reference manager, use the connector plugin
+Better BibTex for Zotero? Basically you get the BibKeys and autoupdate of bib file
+Use the citr package for easy citation?
+https://posit.co/blog/rstudio-1-4-preview-citations/
+https://rstudio.github.io/visual-markdown-editing/citations.html
+
+## Collaboration with Word users
+
+- send out word files, avoid email if possible and use cloud storage like one drive for version control
+- get the word file back, extract comments and covert them to dos or issues, have thw word and rmd side-by-side to edit track changes
+- use pandoc conversion to md and retain all track changes and comment info, these could be tagged as to-dos if diff-ed
+- send out a qmd file and let them open it in word and edit without track changes? comments can be extracted...try and open the edited qmd file in r and diff it
+- archive all word feedback version for future reference
